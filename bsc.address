@@ -1,0 +1,15 @@
+{
+  "projectName": "ShipOrSkip",
+  "network": "BSC Mainnet",
+  "contracts": [
+    {
+      "name": "ShipOrSkipScoreboard",
+      "address": "0x___DEPLOY_PENDING___",
+      "explorerLink": "https://bscscan.com/address/___DEPLOY_PENDING___",
+      "description": "Public scoreboard storing survival scores (0-100) for 30-50 BSC projects + idea attestation hashes. Composable — any dApp can query project scores onchain."
+    }
+  ],
+  "frontendUrl": "https://___DEPLOY_PENDING___.vercel.app",
+  "backendApi": "https://___DEPLOY_PENDING___.vercel.app/api",
+  "notes": "Contract deployed on Day 4. Testnet deployment available earlier on BSC Testnet (chainId 97). Survival scores are batch-registered after data pipeline completes. Idea validation attestation hashes are stored when users validate ideas through the platform."
+}

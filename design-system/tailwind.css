@@ -1,0 +1,203 @@
+/* =============================================================================
+   ShipOrSkip (SOS) — Tailwind CSS v4 Theme
+   =============================================================================
+   Usage: Import this file as your main Tailwind stylesheet.
+   
+     @import "./design-system/tailwind.css";
+   
+   Or in your app's CSS:
+   
+     @import "tailwindcss";
+     @import "./design-system/tokens/index.css";
+     @import "./design-system/tailwind.css";
+   
+   This maps all CSS custom property tokens to Tailwind utilities.
+   
+   ⚠️ SINGLE SOURCE OF TRUTH: tokens/colors.css
+   Tailwind v4 @theme requires literal values (not var() references).
+   These hex values are duplicated from tokens/colors.css.
+   If brand colors change, update BOTH files. Search "Brand anchor" in
+   colors.css for the canonical values.
+   ============================================================================= */
+
+@import './tokens/index.css';
+
+@theme {
+  /* =========================================================================
+     COLORS — Maps to bg-*, text-*, border-*, ring-* utilities
+     ========================================================================= */
+
+  /* --- Navy Scale --- */
+  --color-navy-50:  #F1F4F9;
+  --color-navy-100: #E0E7F1;
+  --color-navy-200: #C2CEE3;
+  --color-navy-300: #96A8CC;
+  --color-navy-400: #6A82B2;
+  --color-navy-500: #4A6499;
+  --color-navy-600: #384D7A;
+  --color-navy-700: #2B3B5E;
+  --color-navy-800: #1A2743;
+  --color-navy-900: #0A1628;
+  --color-navy-950: #050B14;
+
+  /* --- Green (Ship) Scale --- */
+  --color-ship-50:  #ECFDF4;
+  --color-ship-100: #D1FAE5;
+  --color-ship-200: #A7F3CF;
+  --color-ship-300: #6EE7AD;
+  --color-ship-400: #34D985;
+  --color-ship-500: #00D26A;
+  --color-ship-600: #00A854;
+  --color-ship-700: #008743;
+  --color-ship-800: #066B37;
+  --color-ship-900: #08572E;
+  --color-ship-950: #023019;
+
+  /* --- Red (Skip) Scale --- */
+  --color-skip-50:  #FFF1F3;
+  --color-skip-100: #FFE0E4;
+  --color-skip-200: #FFC7CE;
+  --color-skip-300: #FF9EAC;
+  --color-skip-400: #FF3B5C;
+  --color-skip-500: #F01235;
+  --color-skip-600: #D0072A;
+  --color-skip-700: #A90C24;
+  --color-skip-800: #8C1023;
+  --color-skip-900: #781323;
+  --color-skip-950: #42040E;
+
+  /* --- Amber (Wait) Scale --- */
+  --color-wait-50:  #FFFBEB;
+  --color-wait-100: #FEF3C7;
+  --color-wait-200: #FDE68A;
+  --color-wait-300: #FCD34D;
+  --color-wait-400: #FBBD23;
+  --color-wait-500: #FFB800;
+  --color-wait-600: #D99706;
+  --color-wait-700: #B17309;
+  --color-wait-800: #8F5A0E;
+  --color-wait-900: #764812;
+  --color-wait-950: #432606;
+
+  /* --- Blue (Data) Scale --- */
+  --color-data-50:  #EFF6FF;
+  --color-data-100: #DBEAFE;
+  --color-data-200: #BFDBFE;
+  --color-data-300: #93C5FD;
+  --color-data-400: #60A5FA;
+  --color-data-500: #3B82F6;
+  --color-data-600: #2563EB;
+  --color-data-700: #1D4ED8;
+  --color-data-800: #1E40AF;
+  --color-data-900: #1E3A8A;
+  --color-data-950: #172554;
+
+  /* --- Purple (Whale) Scale --- */
+  --color-whale-50:  #F5F3FF;
+  --color-whale-100: #EDE9FE;
+  --color-whale-200: #DDD6FE;
+  --color-whale-300: #C4B5FD;
+  --color-whale-400: #A78BFA;
+  --color-whale-500: #8B5CF6;
+  --color-whale-600: #7C3AED;
+  --color-whale-700: #6D28D9;
+  --color-whale-800: #5B21B6;
+  --color-whale-900: #4C1D95;
+  --color-whale-950: #2E1065;
+
+  /* --- Neutral (Slate) --- */
+  --color-neutral-50:  #F8FAFC;
+  --color-neutral-100: #F1F5F9;
+  --color-neutral-200: #E2E8F0;
+  --color-neutral-300: #CBD5E1;
+  --color-neutral-400: #94A3B8;
+  --color-neutral-500: #64748B;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1E293B;
+  --color-neutral-900: #0F172A;
+  --color-neutral-950: #020617;
+
+  /* =========================================================================
+     FONTS — Maps to font-sans, font-mono utilities
+     ========================================================================= */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Mono', 'Consolas', monospace;
+
+  /* =========================================================================
+     SPACING — Extends default spacing scale
+     ========================================================================= */
+  --spacing-18: 4.5rem;   /* 72px */
+  --spacing-88: 22rem;    /* 352px */
+  --spacing-112: 28rem;   /* 448px */
+  --spacing-128: 32rem;   /* 512px */
+
+  /* =========================================================================
+     BORDER RADIUS
+     ========================================================================= */
+  --radius-sm:   0.25rem;
+  --radius-md:   0.375rem;
+  --radius-lg:   0.5rem;
+  --radius-xl:   0.75rem;
+  --radius-2xl:  1rem;
+  --radius-3xl:  1.5rem;
+  --radius-pill: 9999px;
+
+  /* =========================================================================
+     SHADOWS — Dark UI optimized
+     ========================================================================= */
+  --shadow-xs:  0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-sm:  0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+  --shadow-md:  0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg:  0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --shadow-xl:  0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+
+  /* Verdict glow effects */
+  --shadow-glow-ship:  0 0 20px rgba(0, 210, 106, 0.15), 0 0 6px rgba(0, 210, 106, 0.1);
+  --shadow-glow-skip:  0 0 20px rgba(255, 59, 92, 0.15), 0 0 6px rgba(255, 59, 92, 0.1);
+  --shadow-glow-wait:  0 0 20px rgba(255, 184, 0, 0.15), 0 0 6px rgba(255, 184, 0, 0.1);
+  --shadow-glow-whale: 0 0 20px rgba(139, 92, 246, 0.15), 0 0 6px rgba(139, 92, 246, 0.1);
+
+  /* =========================================================================
+     ANIMATION
+     ========================================================================= */
+  --animate-fade-in: fade-in 200ms ease-out;
+  --animate-slide-up: slide-up 300ms ease-out;
+  --animate-scale-in: scale-in 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+}
+
+/* =========================================================================
+   KEYFRAMES
+   ========================================================================= */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.7; }
+}
+
+/* =========================================================================
+   REDUCED MOTION
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

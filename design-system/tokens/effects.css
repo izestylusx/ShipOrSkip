@@ -1,0 +1,169 @@
+/* =============================================================================
+   ShipOrSkip (SOS) — Elevation, Border, Motion & Z-Index Tokens
+   ============================================================================= */
+
+:root {
+  /* =========================================================================
+     ELEVATION / SHADOWS
+     Dark UI convention: shadows less visible, use lighter border emphasis
+     Elevation increases = lighter border + subtle glow, not heavy drop shadows
+     ========================================================================= */
+
+  --shadow-none:   none;
+
+  /* Subtle shadow for cards on dark bg */
+  --shadow-xs:     0 1px 2px 0 rgba(0, 0, 0, 0.3);
+
+  /* Default card elevation */
+  --shadow-sm:     0 1px 3px 0 rgba(0, 0, 0, 0.4),
+                   0 1px 2px -1px rgba(0, 0, 0, 0.3);
+
+  /* Raised cards, dropdown triggers */
+  --shadow-md:     0 4px 6px -1px rgba(0, 0, 0, 0.4),
+                   0 2px 4px -2px rgba(0, 0, 0, 0.3);
+
+  /* Dropdowns, popovers, tooltips */
+  --shadow-lg:     0 10px 15px -3px rgba(0, 0, 0, 0.4),
+                   0 4px 6px -4px rgba(0, 0, 0, 0.3);
+
+  /* Modals, dialog overlays */
+  --shadow-xl:     0 20px 25px -5px rgba(0, 0, 0, 0.5),
+                   0 8px 10px -6px rgba(0, 0, 0, 0.4);
+
+  /* Top-level overlays */
+  --shadow-2xl:    0 25px 50px -12px rgba(0, 0, 0, 0.6);
+
+  /* Inset shadow for inputs, sunken areas */
+  --shadow-inner:  inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+
+  /* --- Verdict Glow Shadows (for emphasis on dark backgrounds) ------------ */
+  --shadow-glow-ship:  0 0 20px rgba(0, 210, 106, 0.15),
+                       0 0 6px rgba(0, 210, 106, 0.1);
+
+  --shadow-glow-skip:  0 0 20px rgba(255, 59, 92, 0.15),
+                       0 0 6px rgba(255, 59, 92, 0.1);
+
+  --shadow-glow-wait:  0 0 20px rgba(255, 184, 0, 0.15),
+                       0 0 6px rgba(255, 184, 0, 0.1);
+
+  --shadow-glow-whale: 0 0 20px rgba(139, 92, 246, 0.15),
+                       0 0 6px rgba(139, 92, 246, 0.1);
+
+  /* --- Focus Ring Shadow -------------------------------------------------- */
+  --shadow-focus:      0 0 0 2px var(--surface-base),
+                       0 0 0 4px var(--border-focus);
+
+
+  /* =========================================================================
+     BORDER RADIUS
+     Consistent rounding system
+     ========================================================================= */
+  --radius-none:   0;
+  --radius-sm:     0.25rem;    /*  4px — subtle rounding */
+  --radius-md:     0.375rem;   /*  6px — inputs, small elements */
+  --radius-lg:     0.5rem;     /*  8px — buttons */
+  --radius-xl:     0.75rem;    /* 12px — cards (matches brand doc) */
+  --radius-2xl:    1rem;       /* 16px — large cards, modals */
+  --radius-3xl:    1.5rem;     /* 24px — hero elements */
+  --radius-full:   9999px;     /* Pill shape — badges, tags */
+
+  /* Semantic aliases */
+  --radius-badge:  var(--radius-full);   /* Pill badges */
+  --radius-button: var(--radius-lg);     /* Buttons */
+  --radius-card:   var(--radius-xl);     /* Cards */
+  --radius-input:  var(--radius-md);     /* Form inputs */
+  --radius-modal:  var(--radius-2xl);    /* Modals */
+  --radius-score:  var(--radius-full);   /* Score ring (circle) */
+
+
+  /* =========================================================================
+     BORDER WIDTH
+     ========================================================================= */
+  --border-0:     0;
+  --border-1:     1px;
+  --border-2:     2px;
+  --border-4:     4px;
+
+  /* Semantic */
+  --border-default-width:  var(--border-1);
+  --border-focus-width:    var(--border-2);
+  --border-accent-width:   var(--border-2);
+
+
+  /* =========================================================================
+     MOTION / ANIMATION
+     Respects prefers-reduced-motion
+     ========================================================================= */
+
+  /* --- Duration ----------------------------------------------------------- */
+  --duration-instant:  0ms;
+  --duration-fast:     100ms;    /* Micro-interactions: hover, toggle */
+  --duration-normal:   200ms;    /* Default transitions */
+  --duration-moderate: 300ms;    /* Panels sliding, dropdown open */
+  --duration-slow:     500ms;    /* Page transitions, complex animations */
+  --duration-slower:   700ms;    /* Orchestrated sequences */
+
+  /* --- Easing ------------------------------------------------------------- */
+  --ease-linear:    linear;
+  --ease-in:        cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:       cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:    cubic-bezier(0.34, 1.56, 0.64, 1);     /* Bouncy overshoot */
+  --ease-bounce:    cubic-bezier(0.68, -0.6, 0.32, 1.6);   /* Playful bounce */
+
+  /* --- Composite Transitions ---------------------------------------------- */
+  --transition-colors:    color var(--duration-normal) var(--ease-in-out),
+                          background-color var(--duration-normal) var(--ease-in-out),
+                          border-color var(--duration-normal) var(--ease-in-out);
+
+  --transition-opacity:   opacity var(--duration-normal) var(--ease-in-out);
+
+  --transition-transform: transform var(--duration-normal) var(--ease-out);
+
+  --transition-shadow:    box-shadow var(--duration-normal) var(--ease-in-out);
+
+  --transition-all:       all var(--duration-normal) var(--ease-in-out);
+
+  --transition-slide:     transform var(--duration-moderate) var(--ease-out),
+                          opacity var(--duration-moderate) var(--ease-out);
+
+
+  /* =========================================================================
+     Z-INDEX SCALE
+     Consistent layering — never guess z-index again
+     ========================================================================= */
+  --z-base:       0;
+  --z-raised:     1;       /* Slightly above siblings (hover cards) */
+  --z-dropdown:   10;      /* Dropdowns, select menus */
+  --z-sticky:     20;      /* Sticky headers, fixed nav */
+  --z-overlay:    30;      /* Overlay backgrounds */
+  --z-modal:      40;      /* Modal dialogs */
+  --z-popover:    50;      /* Popovers, tooltips */
+  --z-toast:      60;      /* Toast notifications */
+  --z-max:        9999;    /* Emergency override only */
+
+
+  /* =========================================================================
+     OPACITY
+     ========================================================================= */
+  --opacity-disabled:  0.5;
+  --opacity-hover:     0.8;
+  --opacity-overlay:   0.6;     /* Modal backdrop */
+  --opacity-ghost:     0.05;    /* Ghost/tint backgrounds */
+  --opacity-subtle:    0.1;
+}
+
+
+/* ===========================================================================
+   REDUCED MOTION
+   Respect user preference — collapse all durations to instant
+   =========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast:     0ms;
+    --duration-normal:   0ms;
+    --duration-moderate: 0ms;
+    --duration-slow:     0ms;
+    --duration-slower:   0ms;
+  }
+}

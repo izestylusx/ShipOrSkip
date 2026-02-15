@@ -1,0 +1,295 @@
+/* =============================================================================
+   ShipOrSkip (SOS) — Color Token System
+   =============================================================================
+   Token Architecture: Primitive → Semantic → Component
+   
+   LAYER 1 — Primitives: Raw color values (scales 50-950)
+   LAYER 2 — Semantic:   Contextual meaning (text-primary, surface, verdict)
+   LAYER 3 — Component:  Specific usage (badge-bg-ship, score-ring-fill)
+   
+   All colors derive from brand hex anchors in the brand strategy doc.
+   Scales generated with consistent hue, varied lightness + slight saturation shift.
+   ============================================================================= */
+
+:root {
+  /* =========================================================================
+     LAYER 1: PRIMITIVE COLOR TOKENS
+     ========================================================================= */
+
+  /* ---------------------------------------------------------------------------
+     Navy (Brand Foundation)
+     Anchor: #0A1628 = hsl(216, 60%, 10%) → mapped to shade 900
+     Cool-toned dark base conveying trust, depth, intelligence
+     --------------------------------------------------------------------------- */
+  --color-navy-50:  #F1F4F9;
+  --color-navy-100: #E0E7F1;
+  --color-navy-200: #C2CEE3;
+  --color-navy-300: #96A8CC;
+  --color-navy-400: #6A82B2;
+  --color-navy-500: #4A6499;
+  --color-navy-600: #384D7A;
+  --color-navy-700: #2B3B5E;
+  --color-navy-800: #1A2743;
+  --color-navy-900: #0A1628;  /* ← Brand anchor: SOS Navy */
+  --color-navy-950: #050B14;
+
+  /* ---------------------------------------------------------------------------
+     Green (Ship / Go / Alive)
+     Anchor: #00D26A = hsl(150, 100%, 41%) → mapped to shade 500
+     Approval, alive status, positive verdicts
+     --------------------------------------------------------------------------- */
+  --color-green-50:  #ECFDF4;
+  --color-green-100: #D1FAE5;
+  --color-green-200: #A7F3CF;
+  --color-green-300: #6EE7AD;
+  --color-green-400: #34D985;
+  --color-green-500: #00D26A;  /* ← Brand anchor: Verdict Green */
+  --color-green-600: #00A854;
+  --color-green-700: #008743;
+  --color-green-800: #066B37;
+  --color-green-900: #08572E;
+  --color-green-950: #023019;
+
+  /* ---------------------------------------------------------------------------
+     Red (Skip / Stop / Dead)
+     Anchor: #FF3B5C = hsl(350, 100%, 62%) → mapped to shade 400
+     Danger, dead projects, skip verdicts
+     NOTE: Brand anchor sits at 400 (bright). Use 600+ for text-on-light.
+     --------------------------------------------------------------------------- */
+  --color-red-50:  #FFF1F3;
+  --color-red-100: #FFE0E4;
+  --color-red-200: #FFC7CE;
+  --color-red-300: #FF9EAC;
+  --color-red-400: #FF3B5C;  /* ← Brand anchor: Verdict Red */
+  --color-red-500: #F01235;
+  --color-red-600: #D0072A;
+  --color-red-700: #A90C24;
+  --color-red-800: #8C1023;
+  --color-red-900: #781323;
+  --color-red-950: #42040E;
+
+  /* ---------------------------------------------------------------------------
+     Amber (Caution / Wait / Zombie)
+     Anchor: #FFB800 = hsl(43, 100%, 50%) → mapped to shade 500
+     Uncertain, pivot, zombie projects
+     NOTE: Fails contrast on white. Use 700+ for text-on-light.
+     --------------------------------------------------------------------------- */
+  --color-amber-50:  #FFFBEB;
+  --color-amber-100: #FEF3C7;
+  --color-amber-200: #FDE68A;
+  --color-amber-300: #FCD34D;
+  --color-amber-400: #FBBD23;
+  --color-amber-500: #FFB800;  /* ← Brand anchor: Signal Amber */
+  --color-amber-600: #D99706;
+  --color-amber-700: #B17309;
+  --color-amber-800: #8F5A0E;
+  --color-amber-900: #764812;
+  --color-amber-950: #432606;
+
+  /* ---------------------------------------------------------------------------
+     Blue (Data / Information / Active)
+     Anchor: #3B82F6 = Tailwind blue-500
+     Data, links, info states, clarity
+     --------------------------------------------------------------------------- */
+  --color-blue-50:  #EFF6FF;
+  --color-blue-100: #DBEAFE;
+  --color-blue-200: #BFDBFE;
+  --color-blue-300: #93C5FD;
+  --color-blue-400: #60A5FA;
+  --color-blue-500: #3B82F6;  /* ← Brand anchor: Data Blue */
+  --color-blue-600: #2563EB;
+  --color-blue-700: #1D4ED8;
+  --color-blue-800: #1E40AF;
+  --color-blue-900: #1E3A8A;
+  --color-blue-950: #172554;
+
+  /* ---------------------------------------------------------------------------
+     Purple (Whale / Premium / Hidden Intel)
+     Anchor: #8B5CF6 = Tailwind violet-500
+     Smart money signals, premium features
+     --------------------------------------------------------------------------- */
+  --color-purple-50:  #F5F3FF;
+  --color-purple-100: #EDE9FE;
+  --color-purple-200: #DDD6FE;
+  --color-purple-300: #C4B5FD;
+  --color-purple-400: #A78BFA;
+  --color-purple-500: #8B5CF6;  /* ← Brand anchor: Stealth Purple */
+  --color-purple-600: #7C3AED;
+  --color-purple-700: #6D28D9;
+  --color-purple-800: #5B21B6;
+  --color-purple-900: #4C1D95;
+  --color-purple-950: #2E1065;
+
+  /* ---------------------------------------------------------------------------
+     Slate (Neutral Scale)
+     Tailwind slate with blue undertone — pairs naturally with Navy base
+     --------------------------------------------------------------------------- */
+  --color-slate-50:  #F8FAFC;
+  --color-slate-100: #F1F5F9;
+  --color-slate-200: #E2E8F0;
+  --color-slate-300: #CBD5E1;
+  --color-slate-400: #94A3B8;
+  --color-slate-500: #64748B;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1E293B;
+  --color-slate-900: #0F172A;
+  --color-slate-950: #020617;
+
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+
+
+  /* =========================================================================
+     LAYER 2: SEMANTIC COLOR TOKENS
+     Contextual meaning — switch these for theming
+     ========================================================================= */
+
+  /* --- Surfaces ----------------------------------------------------------- */
+  --surface-base:        var(--color-navy-900);      /* Primary background */
+  --surface-raised:      var(--color-navy-800);      /* Cards, panels */
+  --surface-overlay:     var(--color-navy-700);      /* Dropdowns, popovers */
+  --surface-sunken:      var(--color-navy-950);      /* Inset areas */
+  --surface-inverse:     var(--color-white);         /* Light sections */
+
+  /* --- Text --------------------------------------------------------------- */
+  --text-primary:        var(--color-white);          /* Primary on dark */
+  --text-secondary:      var(--color-slate-400);      /* Muted/secondary */
+  --text-tertiary:       var(--color-slate-500);      /* Subtle/disabled */
+  --text-inverse:        var(--color-navy-900);       /* On light surfaces */
+  --text-link:           var(--color-blue-400);       /* Links on dark bg */
+
+  /* --- Borders ------------------------------------------------------------ */
+  --border-default:      var(--color-navy-700);       /* Standard borders */
+  --border-subtle:       var(--color-navy-800);       /* Subtle dividers */
+  --border-strong:       var(--color-slate-400);      /* Emphasis borders */
+  --border-focus:        var(--color-blue-400);       /* Focus ring */
+
+  /* --- Interactive -------------------------------------------------------- */
+  --interactive-primary:     var(--color-blue-500);
+  --interactive-primary-hover: var(--color-blue-600);
+  --interactive-primary-active: var(--color-blue-700);
+
+  /* --- Verdict System (Core Feature) -------------------------------------- */
+  --verdict-ship:        var(--color-green-500);      /* SHIP on dark bg */
+  --verdict-ship-subtle: var(--color-green-950);      /* SHIP bg tint */
+  --verdict-ship-text:   var(--color-green-400);      /* SHIP readable text */
+
+  --verdict-skip:        var(--color-red-400);        /* SKIP on dark bg */
+  --verdict-skip-subtle: var(--color-red-950);        /* SKIP bg tint */
+  --verdict-skip-text:   var(--color-red-300);        /* SKIP readable text */
+
+  --verdict-wait:        var(--color-amber-500);      /* WAIT on dark bg */
+  --verdict-wait-subtle: var(--color-amber-950);      /* WAIT bg tint */
+  --verdict-wait-text:   var(--color-amber-300);      /* WAIT readable text */
+
+  /* --- Status ------------------------------------------------------------- */
+  --status-alive:        var(--color-green-500);
+  --status-zombie:       var(--color-amber-500);
+  --status-dead:         var(--color-red-400);
+  --status-pivoted:      var(--color-blue-400);
+
+  /* --- Signals ------------------------------------------------------------ */
+  --signal-whale:        var(--color-purple-400);
+  --signal-whale-subtle: var(--color-purple-950);
+
+  /* --- Feedback ----------------------------------------------------------- */
+  --feedback-success:    var(--color-green-500);
+  --feedback-warning:    var(--color-amber-500);
+  --feedback-error:      var(--color-red-400);
+  --feedback-info:       var(--color-blue-400);
+
+
+  /* =========================================================================
+     LAYER 3: COMPONENT COLOR TOKENS
+     Specific to UI elements — maximum refactorability
+     ========================================================================= */
+
+  /* --- Verdict Badge ------------------------------------------------------ */
+  /* ⚠️ CONTRAST FIX: green-700 (5.4:1) and red-600 (5.6:1) pass WCAG AA
+     with white text. The brighter 500/400 shades do NOT (2.7:1 / 3.2:1).
+     See accessibility.md § Verdict Badge Accessibility */
+  --badge-ship-bg:       var(--color-green-700);  /* #008743 — 5.4:1 w/ white ✅ */
+  --badge-ship-text:     var(--color-white);
+  --badge-skip-bg:       var(--color-red-600);    /* #D0072A — 5.6:1 w/ white ✅ */
+  --badge-skip-text:     var(--color-white);
+  --badge-wait-bg:       var(--color-amber-500);  /* #FFB800 — 7.8:1 w/ navy ✅ */
+  --badge-wait-text:     var(--color-navy-900);   /* Dark text on amber */
+
+  /* --- Score Ring --------------------------------------------------------- */
+  --score-ring-track:    var(--color-navy-700);
+  --score-ring-high:     var(--color-green-500);  /* 70-100 */
+  --score-ring-mid:      var(--color-amber-500);  /* 40-69 */
+  --score-ring-low:      var(--color-red-400);    /* 0-39 */
+  --score-text:          var(--color-white);
+
+  /* --- Project Card ------------------------------------------------------- */
+  --card-bg:             var(--color-navy-800);
+  --card-border:         var(--color-navy-700);
+  --card-hover-border:   var(--color-slate-500);
+
+  /* --- Whale Signal Card -------------------------------------------------- */
+  --whale-card-bg:       var(--color-purple-950);
+  --whale-card-border:   var(--color-purple-700);
+  --whale-card-accent:   var(--color-purple-400);
+
+  /* --- Navigation --------------------------------------------------------- */
+  --nav-bg:              var(--color-navy-950);
+  --nav-text:            var(--color-slate-400);
+  --nav-text-active:     var(--color-white);
+  --nav-indicator:       var(--color-green-500);
+
+  /* --- Loading / Skeleton States ------------------------------------------ */
+  --skeleton-bg:         var(--color-navy-700);
+  --skeleton-shine:      var(--color-navy-600);
+  --skeleton-radius:     var(--radius-md, 0.375rem);
+
+  /* --- Empty State -------------------------------------------------------- */
+  --empty-icon:          var(--color-slate-600);
+  --empty-text:          var(--color-slate-400);
+  --empty-action:        var(--color-blue-400);
+
+  /* --- Error State -------------------------------------------------------- */
+  --error-bg:            var(--color-red-950);
+  --error-border:        var(--color-red-700);
+  --error-text:          var(--color-red-300);
+  --error-icon:          var(--color-red-400);
+}
+
+
+/* ===========================================================================
+   LIGHT MODE OVERRIDES
+   For light sections, embed forms, or future light theme
+   =========================================================================== */
+[data-theme="light"],
+.theme-light {
+  --surface-base:        var(--color-white);
+  --surface-raised:      var(--color-slate-50);
+  --surface-overlay:     var(--color-white);
+  --surface-sunken:      var(--color-slate-100);
+  --surface-inverse:     var(--color-navy-900);
+
+  --text-primary:        var(--color-navy-900);
+  --text-secondary:      var(--color-slate-600);
+  --text-tertiary:       var(--color-slate-400);
+  --text-inverse:        var(--color-white);
+  --text-link:           var(--color-blue-600);
+
+  --border-default:      var(--color-slate-200);
+  --border-subtle:       var(--color-slate-100);
+  --border-strong:       var(--color-slate-400);
+  --border-focus:        var(--color-blue-500);
+
+  /* Verdict text uses DARKER shades for contrast on light */
+  --verdict-ship-text:   var(--color-green-700);
+  --verdict-skip-text:   var(--color-red-700);
+  --verdict-wait-text:   var(--color-amber-700);
+
+  --verdict-ship-subtle: var(--color-green-50);
+  --verdict-skip-subtle: var(--color-red-50);
+  --verdict-wait-subtle: var(--color-amber-50);
+
+  --card-bg:             var(--color-white);
+  --card-border:         var(--color-slate-200);
+  --card-hover-border:   var(--color-slate-400);
+}
