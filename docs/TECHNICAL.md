@@ -71,6 +71,39 @@ flowchart TB
 | **Scoring Engine** | TypeScript (pipeline-v2) | 13-factor, category-adaptive survival scoring (0-100) |
 | **Smart Contract** | Solidity + Hardhat | Public scoreboard on BSC Mainnet |
 
+### Database Schema (Prisma)
+
+The frontend uses **Supabase PostgreSQL** via Prisma ORM for persisting anonymous validation records. This powers community aggregate stats ("247 ideas validated, DEX ideas avg PMF 38/100").
+
+```prisma
+model ValidationRecord {
+  id               Int      @id @default(autoincrement())
+  category         String                          // e.g. "DEX", "Gaming", "AI"
+  signal           String                          // SHIP | SHIP_WITH_CAUTION | HIGH_RISK
+  pmfScore         Int      @map("pmf_score")      // 0-100
+  ideaDescription  String?  @map("idea_description")
+  targetUsers      String?  @map("target_users")
+  recommendation   String?
+  biggestRisk      String?  @map("biggest_risk")
+  deathPatterns    String?  @map("death_patterns")
+  edgeNeeded       String?  @map("edge_needed")
+  timingAssessment String?  @map("timing_assessment")
+  analysisMode     String?  @map("analysis_mode")  // "ai" | "fallback"
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  @@index([category])
+  @@index([signal])
+  @@index([createdAt])
+  @@map("validation_records")
+}
+```
+
+**Design decisions:**
+- **No user accounts** — anonymous by design (hackathon MVP). No PII stored.
+- **Indexed on `category`, `signal`, `createdAt`** — fast aggregation queries for community stats.
+- **`analysisMode`** tracks whether result came from AI or data-driven fallback.
+- Pipeline v2 has its own PostgreSQL schema (managed separately via `pipeline-v2-public/prisma/`).
+
 ### Pipeline v2: 13-Factor Scoring System
 
 Projects are scored across 13 factors with **7 weight profiles** adapting to category:
