@@ -53,7 +53,7 @@ Before writing any code, AI generated the full system design blueprint.
 
 ### Phase 2 — Data Pipeline: Discovery + Enrichment (Days 1–3)
 
-The core data asset: 1,600+ BNB Chain projects discovered from public APIs, curated down to 111 representative projects, each enriched from up to 7 data sources.
+The core data asset: 1,600+ BNB Chain projects discovered from public APIs, curated down to 220 representative projects, each enriched from up to 7 data sources.
 
 #### 2a. Project Discovery
 
@@ -90,7 +90,7 @@ Each project goes through a parallel enrichment cascade via modular source adapt
 | `pipeline/store.ts` | Persists enriched + scored projects to PostgreSQL via Prisma. Handles upsert logic and data validation before write |
 | `pipeline/analyzer.ts` | AI-powered post-mortem analysis for dead/zombie projects. Generates narrative explanations of failure patterns |
 
-**Result:** 111 curated projects across 9 categories. 21 alive / 84 zombie / 6 dead. Scores range 29–71. Stored in PostgreSQL, served via Express API.
+**Result:** 220 curated projects across 9 categories. 117 alive / 83 zombie / 20 dead. Scores range 29–71. Stored in PostgreSQL, served via Express API.
 
 ---
 
@@ -210,7 +210,7 @@ This makes the prompt **impossible to replicate** by asking a general AI — it 
 | **Tests** | 15/15 Hardhat tests passing across deploy, register, submitIdea, snapshot, and access-control scenarios |
 | **BSC Mainnet** | Contract: `0xd6a229D8cFbde4be596dd9Cd53d1b3E8bD272432` |
 | **Proof tx** | `0x4afe87ab4df35e14ca0f91adaac35061b31d8da438dd9b66c8468a1f18deef58` |
-| **Registered** | 111 project scores + 1 ecosystem snapshot written on-chain |
+| **Registered** | 220 project scores + 1 ecosystem snapshot written on-chain |
 | **`submitIdea()` flow** | Builder connects wallet → signs tx → idea hash (keccak256 of description) written to contract. Tx hash shown in validator result → proof of validation timestamp |
 
 **Onchain scripts** (`onchain/scripts/`):
@@ -374,9 +374,9 @@ prisma/schema.prisma                ← ValidationRecord model
 | **API routes** | 6 (validate, status, history, stats, revalidate, og) |
 | **AI model integrations** | 3 (Grok-4.1/xAI primary, Kimi K2.5/Moonshot Reddit intel, Gemini 2.0 Flash fallback) |
 | **Smart contract** | `ShipOrSkipScoreboard.sol` — BSC mainnet `0xd6a229...2432` |
-| **Onchain records** | 111 project scores + 1 ecosystem snapshot |
+| **Onchain records** | 220 project scores + 1 ecosystem snapshot |
 | **Database** | Supabase PostgreSQL via Prisma (`ValidationRecord`) |
-| **Projects in dataset** | 111 curated (enriched from multi-source BNB Chain data) |
+| **Projects in dataset** | 220 curated (enriched from multi-source BNB Chain data) |
 | **Enrichment sources** | 7 (NodeReal, DexScreener, CoinGecko, CoinMarketCap, DeFiLlama, GeckoTerminal, whale signals) |
 | **Infrastructure** | 2× VPS (pipeline + frontend), Docker, Nginx, PM2 |
 
