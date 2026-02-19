@@ -9,7 +9,7 @@ import type { RateLimiterConfig } from "./types";
  *
  * Profiles:
  *   BSCScan   — 3 req/sec   (windowMs = 1000,  maxRequests = 3)
- *   GeckoTerm — 10 req/min  (windowMs = 60000, maxRequests = 10)
+ *   GeckoTerm — 10 req/min  (windowMs = 60000, maxRequests = 10)  [official free tier]
  *   DexScreen — 300 req/min (windowMs = 60000, maxRequests = 300)
  *   Moralis   — custom CU   (maxCU = 40_000,   cuWindowMs = 86400000)
  */
@@ -46,7 +46,7 @@ export class RateLimiter {
         const remaining = this.cuWindowMs - (now - this.cuWindowStart);
         console.warn(
           `[${this.name}] CU limit reached (${this.cuUsed}/${this.maxCU}). ` +
-            `Resets in ${Math.ceil(remaining / 60_000)} min. Skipping.`
+          `Resets in ${Math.ceil(remaining / 60_000)} min. Skipping.`
         );
         throw new Error(`CU_LIMIT_REACHED`);
       }
@@ -104,7 +104,7 @@ export const bscscanLimiter = new RateLimiter({
 
 export const geckoTerminalLimiter = new RateLimiter({
   name: "GeckoTerminal",
-  maxRequests: 10,
+  maxRequests: 10, // Official free tier: ~10 req/min (verified from CoinGecko docs)
   windowMs: 60_000,
 });
 

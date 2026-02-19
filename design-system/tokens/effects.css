@@ -1,53 +1,56 @@
 /* =============================================================================
    ShipOrSkip (SOS) — Elevation, Border, Motion & Z-Index Tokens
+   =============================================================================
+   MODE: Warm Editorial Light — shadows use softer, warm-tinted opacity
+   Dark frame sections (nav/footer) inherit these but glow shadows shift
    ============================================================================= */
 
 :root {
   /* =========================================================================
      ELEVATION / SHADOWS
-     Dark UI convention: shadows less visible, use lighter border emphasis
-     Elevation increases = lighter border + subtle glow, not heavy drop shadows
+     Light UI: visible but soft warm-tinted shadows create natural depth.
+     Cards feel "lifted" from the warm paper background.
      ========================================================================= */
 
   --shadow-none:   none;
 
-  /* Subtle shadow for cards on dark bg */
-  --shadow-xs:     0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  /* Subtle shadow for cards */
+  --shadow-xs:     0 1px 2px 0 rgba(28, 25, 23, 0.05);
 
   /* Default card elevation */
-  --shadow-sm:     0 1px 3px 0 rgba(0, 0, 0, 0.4),
-                   0 1px 2px -1px rgba(0, 0, 0, 0.3);
+  --shadow-sm:     0 1px 3px 0 rgba(28, 25, 23, 0.08),
+                   0 1px 2px -1px rgba(28, 25, 23, 0.06);
 
   /* Raised cards, dropdown triggers */
-  --shadow-md:     0 4px 6px -1px rgba(0, 0, 0, 0.4),
-                   0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-md:     0 4px 6px -1px rgba(28, 25, 23, 0.08),
+                   0 2px 4px -2px rgba(28, 25, 23, 0.06);
 
   /* Dropdowns, popovers, tooltips */
-  --shadow-lg:     0 10px 15px -3px rgba(0, 0, 0, 0.4),
-                   0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --shadow-lg:     0 10px 15px -3px rgba(28, 25, 23, 0.08),
+                   0 4px 6px -4px rgba(28, 25, 23, 0.06);
 
   /* Modals, dialog overlays */
-  --shadow-xl:     0 20px 25px -5px rgba(0, 0, 0, 0.5),
-                   0 8px 10px -6px rgba(0, 0, 0, 0.4);
+  --shadow-xl:     0 20px 25px -5px rgba(28, 25, 23, 0.10),
+                   0 8px 10px -6px rgba(28, 25, 23, 0.08);
 
   /* Top-level overlays */
-  --shadow-2xl:    0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  --shadow-2xl:    0 25px 50px -12px rgba(28, 25, 23, 0.15);
 
   /* Inset shadow for inputs, sunken areas */
-  --shadow-inner:  inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  --shadow-inner:  inset 0 2px 4px 0 rgba(28, 25, 23, 0.06);
 
-  /* --- Verdict Glow Shadows (for emphasis on dark backgrounds) ------------ */
-  --shadow-glow-ship:  0 0 20px rgba(0, 210, 106, 0.15),
-                       0 0 6px rgba(0, 210, 106, 0.1);
+  /* --- Verdict Glow Shadows (subtle on light backgrounds) ----------------- */
+  --shadow-glow-ship:  0 0 20px rgba(13, 150, 105, 0.12),
+                       0 0 6px rgba(13, 150, 105, 0.08);
 
-  --shadow-glow-skip:  0 0 20px rgba(255, 59, 92, 0.15),
-                       0 0 6px rgba(255, 59, 92, 0.1);
+  --shadow-glow-skip:  0 0 20px rgba(220, 74, 74, 0.12),
+                       0 0 6px rgba(220, 74, 74, 0.08);
 
-  --shadow-glow-wait:  0 0 20px rgba(255, 184, 0, 0.15),
-                       0 0 6px rgba(255, 184, 0, 0.1);
+  --shadow-glow-wait:  0 0 20px rgba(217, 124, 10, 0.12),
+                       0 0 6px rgba(217, 124, 10, 0.08);
 
-  --shadow-glow-whale: 0 0 20px rgba(139, 92, 246, 0.15),
-                       0 0 6px rgba(139, 92, 246, 0.1);
+  --shadow-glow-whale: 0 0 20px rgba(124, 58, 237, 0.12),
+                       0 0 6px rgba(124, 58, 237, 0.08);
 
   /* --- Focus Ring Shadow -------------------------------------------------- */
   --shadow-focus:      0 0 0 2px var(--surface-base),

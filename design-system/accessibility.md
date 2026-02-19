@@ -5,51 +5,61 @@
 
 ---
 
-## 1. Contrast Ratio Matrix — Dark Theme (Default)
+## 1. Contrast Ratio Matrix — Warm Light Theme (Default)
 
-Background: `navy-900` (#0A1628)
+Background: `warm-100` (#FAF9F6) — primary page surface
 
 | Foreground | Hex | Ratio (est.) | AA Text | AA Large | Use Case |
 |------------|-----|-------------|---------|----------|----------|
-| White | #FFFFFF | **17.4:1** | ✅ PASS | ✅ PASS | Primary text |
-| Slate 400 | #94A3B8 | **6.2:1** | ✅ PASS | ✅ PASS | Secondary text |
-| Slate 500 | #64748B | **4.1:1** | ⚠️ FAIL | ✅ PASS | Tertiary (large text only!) |
-| Green 500 | #00D26A | **8.0:1** | ✅ PASS | ✅ PASS | Ship verdict |
-| Green 400 | #34D985 | **9.5:1** | ✅ PASS | ✅ PASS | Ship text |
-| Red 400 | #FF3B5C | **5.2:1** | ✅ PASS | ✅ PASS | Skip verdict |
-| Red 300 | #FF9EAC | **8.0:1** | ✅ PASS | ✅ PASS | Skip text |
-| Amber 500 | #FFB800 | **7.8:1** | ✅ PASS | ✅ PASS | Wait verdict |
-| Amber 300 | #FCD34D | **11.2:1** | ✅ PASS | ✅ PASS | Wait text |
-| Blue 400 | #60A5FA | **6.0:1** | ✅ PASS | ✅ PASS | Links, data |
-| Purple 400 | #A78BFA | **5.2:1** | ✅ PASS | ✅ PASS | Whale signals |
+| Warm 900 | #2A2622 | **14.8:1** | ✅ PASS | ✅ PASS | Primary text |
+| Warm 700 | #6B6560 | **4.6:1** | ✅ PASS | ✅ PASS | Secondary text |
+| Warm 500 | #B5B0A6 | **2.6:1** | ❌ FAIL | ⚠️ FAIL | Decorative only |
+| Stone 600 | #57534E | **5.4:1** | ✅ PASS | ✅ PASS | Tertiary text |
+| **Ship 700** | **#047857** | **5.8:1** | ✅ PASS | ✅ PASS | Ship verdict text |
+| Ship 600 | #0D9669 | **3.9:1** | ❌ FAIL | ✅ PASS | Large text/icons only |
+| **Skip 700** | **#9B2C2C** | **7.3:1** | ✅ PASS | ✅ PASS | Skip verdict text |
+| Skip 500 | #DC4A4A | **3.6:1** | ❌ FAIL | ✅ PASS | Large text/icons only |
+| **Wait 700** | **#B45309** | **5.0:1** | ✅ PASS | ✅ PASS | Wait verdict text |
+| Wait 600 | #D97C0A | **3.4:1** | ❌ FAIL | ✅ PASS | Large text/icons only |
+| Data 600 | #2563EB | **4.6:1** | ✅ PASS | ✅ PASS | Links, data |
+| Whale 600 | #7C3AED | **4.6:1** | ✅ PASS | ✅ PASS | Whale signals |
 
-### Key Findings — Dark Theme
-- All verdict colors **pass** on the navy-900 background ✅
-- `slate-500` tertiary text **fails at normal size** — use only for 18px+ text
-- Verdict badges with white text: green-500 bg (2.7:1 ⚠️), red-400 bg (3.2:1 ⚠️) — see Badge section
+### Key Findings — Warm Light Theme
+- **Ship-600, Skip-500, Wait-600 FAIL at normal text size** — use 700 shades for text
+- This is why the token system defines `--verdict-*-text` at the 700 level for light mode
+- Primary text (warm-900) passes with very high contrast ✅
+- `warm-500` fails — use only for decorative/non-essential elements
+
+Background: `white` (#FFFFFF) — card surfaces
+
+| Foreground | Hex | Ratio (est.) | AA Text | AA Large | Use Case |
+|------------|-----|-------------|---------|----------|----------|
+| Warm 900 | #2A2622 | **15.6:1** | ✅ PASS | ✅ PASS | Primary text |
+| Stone 600 | #57534E | **5.7:1** | ✅ PASS | ✅ PASS | Secondary text |
+| Ship 700 | #047857 | **6.1:1** | ✅ PASS | ✅ PASS | Ship text |
+| Skip 700 | #9B2C2C | **7.7:1** | ✅ PASS | ✅ PASS | Skip text |
+| Wait 700 | #B45309 | **5.2:1** | ✅ PASS | ✅ PASS | Wait text |
 
 ---
 
-## 2. Contrast Ratio Matrix — Light Theme
+## 2. Contrast Ratio Matrix — Dark Frame (Nav/Footer)
 
-Background: `white` (#FFFFFF)
+Background: `ink-900` (#1A1A1A) — navigation and footer only
 
 | Foreground | Hex | Ratio (est.) | AA Text | AA Large | Use Case |
 |------------|-----|-------------|---------|----------|----------|
-| Navy 900 | #0A1628 | **17.4:1** | ✅ PASS | ✅ PASS | Primary text |
-| Slate 600 | #475569 | **5.9:1** | ✅ PASS | ✅ PASS | Secondary text |
-| Green 500 | #00D26A | **2.5:1** | ❌ FAIL | ❌ FAIL | **Don't use for text!** |
-| **Green 700** | **#008743** | **5.1:1** | ✅ PASS | ✅ PASS | Ship text on light |
-| Red 400 | #FF3B5C | **3.4:1** | ❌ FAIL | ✅ PASS | Large text only |
-| **Red 700** | **#A90C24** | **7.2:1** | ✅ PASS | ✅ PASS | Skip text on light |
-| Amber 500 | #FFB800 | **2.1:1** | ❌ FAIL | ❌ FAIL | **Don't use for text!** |
-| **Amber 700** | **#B17309** | **4.6:1** | ✅ PASS | ✅ PASS | Wait text on light |
-| Blue 600 | #2563EB | **4.6:1** | ✅ PASS | ✅ PASS | Links on light |
-| Purple 600 | #7C3AED | **4.6:1** | ✅ PASS | ✅ PASS | Whale on light |
+| White | #FFFFFF | **16.0:1** | ✅ PASS | ✅ PASS | Nav text |
+| Warm 300 | #EDEBE6 | **12.8:1** | ✅ PASS | ✅ PASS | Secondary nav text |
+| Stone 400 | #A8A29E | **6.1:1** | ✅ PASS | ✅ PASS | Muted nav text |
+| Ship 400 | #34D399 | **8.8:1** | ✅ PASS | ✅ PASS | Ship indicator |
+| Skip 400 | #F87171 | **5.0:1** | ✅ PASS | ✅ PASS | Skip indicator |
+| Wait 400 | #FBBF24 | **9.4:1** | ✅ PASS | ✅ PASS | Wait indicator |
+| Data 400 | #60A5FA | **5.8:1** | ✅ PASS | ✅ PASS | Links in nav |
 
-### Key Findings — Light Theme
-- **Green-500, Red-400, Amber-500 all FAIL on white** — use 700 shades for text
-- This is why the token system defines separate `verdict-*-text` tokens per theme
+### Key Findings — Dark Frame
+- All verdict colors at shade-400 **pass** on the ink-900 background ✅
+- White + warm-300 provide excellent primary/secondary text contrast
+- Dark frame is used ONLY for nav/footer — not for page content
 
 ---
 
@@ -57,26 +67,44 @@ Background: `white` (#FFFFFF)
 
 Badges use colored backgrounds with text. Inner contrast matters:
 
-| Badge | Background | Text | Ratio | Status | Fix |
-|-------|-----------|------|-------|--------|-----|
-| SHIP | green-500 (#00D26A) | white (#FFF) | ~2.7:1 | ⚠️ FAIL text | Use **green-700** bg or add icon |
-| SKIP | red-400 (#FF3B5C) | white (#FFF) | ~3.2:1 | ⚠️ MARGINAL | Use **red-600** bg or add icon |
-| WAIT | amber-500 (#FFB800) | navy-900 | ~7.8:1 | ✅ PASS | Dark text on amber works |
+### On Warm Light Background (Page Content)
+
+| Badge | Background | Text | Ratio | Status | Notes |
+|-------|-----------|------|-------|--------|-------|
+| SHIP | ship-100 (#D1FAE5) | ship-800 (#065F46) | ~10.2:1 | ✅ PASS | Soft green bg + dark text |
+| SKIP | skip-100 (#FEE2E2) | skip-800 (#822727) | ~8.5:1 | ✅ PASS | Soft red bg + dark text |
+| WAIT | wait-100 (#FEF3C7) | wait-800 (#92400E) | ~7.9:1 | ✅ PASS | Soft amber bg + dark text |
+
+### Bold Badge Variant (High-emphasis)
+
+| Badge | Background | Text | Ratio | Status | Notes |
+|-------|-----------|------|-------|--------|-------|
+| SHIP | ship-700 (#047857) | white (#FFF) | ~5.4:1 | ✅ PASS | Dark green bg + white |
+| SKIP | skip-700 (#9B2C2C) | white (#FFF) | ~7.3:1 | ✅ PASS | Dark red bg + white |
+| WAIT | wait-500 (#F59E0B) | warm-900 (#2A2622) | ~6.8:1 | ✅ PASS | Amber bg + dark text |
 
 ### Recommended Badge Palette (Accessible)
 
 ```css
-/* SHIP badge — darkened green for white text contrast */
---badge-ship-bg:   var(--color-green-700);  /* #008743 — 5.4:1 w/ white */
---badge-ship-text:  white;
+/* Default — Soft badges on light background */
+--badge-ship-bg:   var(--color-ship-100);   /* #D1FAE5 */
+--badge-ship-text:  var(--color-ship-800);  /* #065F46 — 10.2:1 */
 
-/* SKIP badge — darkened red for white text contrast */
---badge-skip-bg:   var(--color-red-600);   /* #D0072A — 5.6:1 w/ white */
---badge-skip-text:  white;
+--badge-skip-bg:   var(--color-skip-100);   /* #FEE2E2 */
+--badge-skip-text:  var(--color-skip-800);  /* #822727 — 8.5:1 */
 
-/* WAIT badge — amber with dark text (already passes) */
---badge-wait-bg:   var(--color-amber-500);  /* #FFB800 — 7.8:1 w/ navy */
---badge-wait-text:  var(--color-navy-900);
+--badge-wait-bg:   var(--color-wait-100);   /* #FEF3C7 */
+--badge-wait-text:  var(--color-wait-800);  /* #92400E — 7.9:1 */
+
+/* Bold — High-emphasis badges */
+--badge-ship-bold-bg:   var(--color-ship-700);  /* #047857 — 5.4:1 w/ white */
+--badge-ship-bold-text:  white;
+
+--badge-skip-bold-bg:   var(--color-skip-700);  /* #9B2C2C — 7.3:1 w/ white */
+--badge-skip-bold-text:  white;
+
+--badge-wait-bold-bg:   var(--color-wait-500);  /* #F59E0B — 6.8:1 w/ dark */
+--badge-wait-bold-text:  var(--color-warm-900);
 ```
 
 ### Always Pair Color with Icons
@@ -117,12 +145,12 @@ Red-green color blindness (deuteranopia/protanopia) makes the primary SHIP/SKIP 
 :focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--surface-base),
-              0 0 0 4px var(--color-blue-400);
+              0 0 0 4px var(--color-data-600);
 }
 
 /* Ensure focus ring has 3:1 contrast against adjacent colors */
-/* blue-400 (#60A5FA) on navy-900 (#0A1628) = ~6:1 ✅ */
-/* blue-500 (#3B82F6) on white (#FFFFFF) = ~4.5:1 ✅ */
+/* data-600 (#2563EB) on warm-100 (#FAF9F6) = ~4.6:1 ✅ (light page) */
+/* data-400 (#60A5FA) on ink-900 (#1A1A1A) = ~5.8:1 ✅ (dark frame) */
 ```
 
 ### Touch Target Sizing

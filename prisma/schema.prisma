@@ -1,0 +1,42 @@
+// ShipOrSkip — Prisma Schema (Hackathon MVP)
+// Database: Supabase PostgreSQL
+// Only models actively used by the app are included here.
+// Run `npx prisma db push` to sync schema to Supabase.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============================================
+// VALIDATION RECORDS (Community Intelligence + AI Evaluation)
+// ============================================
+// Stores every validation: idea description + full AI result.
+// Powers: aggregate stats, AI evaluation, pattern analysis.
+// No user accounts — anonymous by design.
+
+model ValidationRecord {
+  id               Int      @id @default(autoincrement())
+  category         String
+  signal           String   // SHIP | SHIP_WITH_CAUTION | HIGH_RISK
+  pmfScore         Int      @map("pmf_score")
+  ideaDescription  String?  @map("idea_description")
+  targetUsers      String?  @map("target_users")
+  recommendation   String?
+  biggestRisk      String?  @map("biggest_risk")
+  deathPatterns    String?  @map("death_patterns")
+  edgeNeeded       String?  @map("edge_needed")
+  timingAssessment String?  @map("timing_assessment")
+  analysisMode     String?  @map("analysis_mode") // "ai" | "fallback"
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  @@index([category])
+  @@index([signal])
+  @@index([createdAt])
+  @@map("validation_records")
+}

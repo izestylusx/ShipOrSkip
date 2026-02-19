@@ -51,13 +51,15 @@ export interface SeedProject {
   slug: string;
   name: string;
   category: string;
+  categories?: string[];
   defillamaSlug: string | null;
   coingeckoId: string | null;
   tokenAddress: string | null;
   contractAddresses: string[];
   twitterHandle: string | null;
   website: string | null;
-  source: "defillama" | "curated" | "manual";
+  source: "coingecko" | "curated" | "manual" | "dappbay";
+  dappbayId?: number | null;
 }
 
 /** Raw enrichment data collected from all sources before scoring */
@@ -142,6 +144,124 @@ export interface DexScreenerPair {
     h1: { buys: number; sells: number };
     m5: { buys: number; sells: number };
   };
+}
+
+/** Whale enrichment data (from 07b — NodeReal Enhanced API + DexScreener) */
+export interface WhaleEnrichment {
+  /** Total number of token holders */
+  holderCount: number;
+  /** Total supply (decimal string) */
+  totalSupply: string;
+  /** Top 10 holders (excluding burn addresses) */
+  top10Holders: {
+    address: string;
+    balance: string;
+    balanceFormatted: number;
+    pctOfSupply: number;
+  }[];
+  /** Aggregated: top 10 holder % of supply */
+  top10HolderPct: number;
+  /** DexScreener buy/sell ratios (cached) */
+  dexBuySellRatio24h: number | null;
+  dexBuySellRatio6h: number | null;
+  dexBuySellRatio1h: number | null;
+  dexVolume24h: number | null;
+  dexPriceChange24h: number | null;
+  dexLiquidityUsd: number | null;
+  cuConsumed: number;
+  fetchedAt: string;
+}
+
+/** NodeReal BSC RPC enrichment data */
+export interface NodeRealEnrichment {
+  transfers24h: number;
+  ownerAddress: string | null;
+  ownershipRenounced: boolean;
+  totalSupply: string | null;
+  tokenName: string | null;
+  tokenSymbol: string | null;
+  tokenDecimals: number | null;
+  hasContractCode: boolean;
+  bnbBalance: number;
+  fetchedAt: string;
+}
+
+/** CoinGecko API enrichment data */
+export interface CoinGeckoEnrichment {
+  coingeckoId: string;
+  symbol: string | null;
+  marketCap: number | null;
+  price: number | null;
+  priceChange24h: number | null;
+  priceChange7d: number | null;
+  priceChange30d: number | null;
+  ath: number | null;
+  athChangePercent: number | null;
+  volume24h: number | null;
+  circulatingSupply: number | null;
+  totalSupply: number | null;
+  fdv: number | null;
+  categories: string[];
+  bscAddress: string | null;
+  // Community data
+  twitterHandle: string | null;
+  telegramMembers: number | null;
+  watchlistUsers: number | null;
+  sentimentUpPct: number | null;
+  // Developer data
+  commitCount4w: number | null;
+  fetchedAt: string;
+}
+
+/** DeFiLlama per-protocol TVL enrichment data */
+export interface DeFiLlamaTvlEnrichment {
+  slug: string;
+  tvlCurrent: number;
+  tvlPeak: number;
+  tvlHistory: { date: string; tvl: number }[];
+  chainTvls?: Record<string, number>;
+  fetchedAt: string;
+}
+
+/** DappBay API enrichment data (BNB Chain official directory) */
+export interface DappBayEnrichment {
+  dappbayId: number;
+  dappbaySlug: string;
+  dappbayCategory: string;
+  rank: number;
+  isOfficial: boolean;
+  riskType: string | null;
+  riskLevel: string | null;
+  description: string | null;
+  launchTime: number | null;
+  chains: string[];
+  weeklyUsers: number | null;
+  weeklyUsersChange: number | null;
+  weeklyTxns: number | null;
+  weeklyTxnsChange: number | null;
+  weeklyTvl: number | null;
+  weeklyTvlChange: number | null;
+  monthlyUsers: number | null;
+  monthlyTxns: number | null;
+  userHistory7d: { timestamp: number; value: number }[];
+  txnHistory7d: { timestamp: number; value: number }[];
+  fetchedAt: string;
+}
+
+/** Twitter/X API enrichment data */
+export interface TwitterEnrichment {
+  username: string;
+  userId: string;
+  followersCount: number;
+  followingCount: number;
+  tweetCount: number;
+  listedCount: number;
+  likeCount: number | null;
+  description: string | null;
+  createdAt: string | null;
+  // Mention volume (only for borderline projects)
+  mentionCount7d: number | null;
+  fetchedAt: string;
 }
 
 /** Scoring weight map */

@@ -1,0 +1,200 @@
+// =============================================================================
+// ShipOrSkip Pipeline — Prisma Schema
+// =============================================================================
+// Models: Project, ProjectSnapshot, PipelineRun
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ValidationRecord — shared with root schema (idea validation page)
+// Included here so `prisma db push` does NOT drop this table.
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ValidationRecord {
+  id               Int      @id @default(autoincrement())
+  category         String
+  signal           String
+  pmfScore         Int      @map("pmf_score")
+  ideaDescription  String?  @map("idea_description")
+  targetUsers      String?  @map("target_users")
+  recommendation   String?
+  biggestRisk      String?  @map("biggest_risk")
+  deathPatterns    String?  @map("death_patterns")
+  edgeNeeded       String?  @map("edge_needed")
+  timingAssessment String?  @map("timing_assessment")
+  analysisMode     String?  @map("analysis_mode")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  @@index([category])
+  @@index([signal])
+  @@index([createdAt])
+  @@map("validation_records")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Project — main entity, upserted every pipeline run
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Project {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  name      String
+  logoUrl   String?
+  website   String?
+  coingeckoId String?  // CoinGecko coin ID (e.g. "pancakeswap-token")
+  category  String
+  scoringCategory String
+
+  // Token identity
+  tokenAddress    String?
+  tokenConfidence String   @default("none") // high | medium | low | none
+  tokenSymbol     String?
+
+  // Ecosystem metrics (CoinGecko)
+  ecosystemRank     Int?    // CoinGecko market cap rank within BNB ecosystem
+  dailyUsers        Int?
+  weeklyUsers       Int?
+  weeklyUsersChange Float?
+  monthlyUsers      Int?
+  dailyTxns         Int?
+  weeklyTxns        Int?
+  monthlyTxns       Int?
+
+  // DeFiLlama
+  defillamaSlug String?
+  tvlCurrent    Float?
+  tvlPeak       Float?
+  tvlChange1d   Float?
+  tvlChange7d   Float?
+  tvlChange30d  Float?
+
+  // Moralis on-chain metrics
+  holderCount    Int?
+  totalSupply    String?   // BigNumber as string
+  top10HolderPct Float?
+  topHolders     Json?     // Array of { address, balance, pctOfSupply }
+  transfers24h   Int?
+
+  // CoinGecko market data
+  priceUsd       Float?
+  volume24h      Float?
+  marketCapUsd   Float?
+  fdvUsd         Float?
+  liquidityUsd   Float?
+  priceChange24h Float?
+  priceChange6h  Float?
+  priceChange1h  Float?
+
+  // Twitter
+  twitterHandle         String?
+  twitterLastPostAt     DateTime?
+  twitterDaysSincePost  Int?
+  twitterFollowers      Int?
+  twitterLastPost       String?
+  twitterShadowbanned   Boolean   @default(false)
+
+  // Scoring
+  survivalScore Int       @default(0)
+  status        String    @default("unknown") // alive | zombie | dead | unknown
+  factors       Json?     // { factorName: score }
+  whaleSignal   Json?     // WhaleSignal object or null
+
+  // AI Analysis
+  aiAnalysis     Json?     // ProjectAnalysis { aliveSummary, postMortem, analyzedAt, model }
+  lastAnalyzedAt DateTime?
+
+  // Metadata
+  dataSources    String[]  @default([])
+  lastEnrichedAt DateTime?
+  lastScoredAt   DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Relations
+  snapshots ProjectSnapshot[]
+
+  @@index([survivalScore(sort: Desc)])
+  @@index([status])
+  @@index([category])
+  @@index([tokenAddress])
+  @@map("projects")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ProjectSnapshot — daily historical snapshot for sparklines
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ProjectSnapshot {
+  id           Int      @id @default(autoincrement())
+  projectSlug  String
+  snapshotDate DateTime @db.Date
+
+  survivalScore Int?
+  dailyUsers    Int?
+  weeklyUsers   Int?
+  dailyTxns     Int?
+  weeklyTxns    Int?
+  tvlCurrent    Float?
+  holderCount   Int?
+  priceUsd      Float?
+  volume24h     Float?
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  project Project @relation(fields: [projectSlug], references: [slug])
+
+  @@unique([projectSlug, snapshotDate])
+  @@index([projectSlug])
+  @@index([snapshotDate])
+  @@map("project_snapshots")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PipelineRun — observability record per pipeline execution
+// ─────────────────────────────────────────────────────────────────────────────
+
+model PipelineRun {
+  id          Int      @id @default(autoincrement())
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  status      String   @default("running") // running | completed | failed
+
+  triggerType String @default("scheduled") // scheduled | manual
+
+  // Phase stats
+  projectsDiscovered Int?
+  tokensResolved     Int?
+  projectsEnriched   Int?
+  projectsScored     Int?
+  projectsAnalyzed   Int?
+
+  // Source-level stats
+  defillamaMatches  Int?
+  moralisEnriched   Int?
+  marketDataEnriched Int?
+
+  // Timing
+  durationCollectS  Float?
+  durationResolveS  Float?
+  durationEnrichS   Float?
+  durationScoreS    Float?
+  durationAnalyzeS  Float?
+  durationStoreS    Float?
+  durationTotalS    Float?
+
+  // Errors
+  errors Json? // PipelineError[]
+
+  @@index([startedAt(sort: Desc)])
+  @@map("pipeline_runs")
+}

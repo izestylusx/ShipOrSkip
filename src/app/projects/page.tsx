@@ -1,14 +1,23 @@
-export default function ProjectsPage() {
+import { getProjects } from "@/lib/data";
+import ProjectGrid from "@/components/ProjectGrid";
+
+export const revalidate = 600; // revalidate every 10 minutes
+
+export default async function ProjectsPage() {
+  const projects = await getProjects();
+
   return (
-    <main className="min-h-screen bg-navy-950 px-4 py-12">
+    <main className="min-h-screen bg-warm-100 px-4 py-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-2">Ecosystem Radar</h1>
-        <p className="text-neutral-400 mb-8">
-          50+ BSC projects analyzed with survival scoring
-        </p>
-        <div className="text-neutral-500 text-center py-20 border border-dashed border-neutral-800 rounded-xl">
-          Project grid coming soon...
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl lg:text-5xl font-extrabold text-warm-900 tracking-tight mb-4">
+            Ecosystem Explorer
+          </h1>
+          <p className="text-lg text-warm-700 max-w-2xl mx-auto">
+            {projects.length}+ BNB Chain projects scored & ranked. Filter by survival status, category, or market cap.
+          </p>
         </div>
+        <ProjectGrid projects={projects} />
       </div>
     </main>
   );

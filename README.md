@@ -10,18 +10,22 @@
 
 ## What is ShipOrSkip?
 
-ShipOrSkip is an **ecosystem intelligence platform** that helps BNB builders make informed decisions *before* they start building. We analyze 30-50 BSC projects across DeFi, Gaming, Meme, and Infrastructure — scoring each on survival health, detecting whale conviction signals, and surfacing the stories behind dead projects.
+ShipOrSkip is an **ecosystem intelligence platform** that helps BNB builders make informed decisions *before* they start building. We analyze BNB ecosystem projects across key categories — scoring each on survival health, detecting whale conviction signals, and surfacing the stories behind dead projects.
 
 In the era of vibecoding, anyone can build in hours. But without intelligence, vibecoding just accelerates failure. **ShipOrSkip is Step 0** — the intelligence layer before you open any coding tool.
 
 ## Key Features
 
-- 🔎 **Ecosystem Radar** — 30-50 BSC projects analyzed with survival scoring (0-100)
+- 🔎 **Ecosystem Radar** — BNB project dataset analyzed with survival scoring (0-100)
 - 💀 **Post-Mortem Reports** — Why projects died or survived — actionable lessons
 - 📡 **Narrative Radar** — Ecosystem narrative trends from Twitter data
-- ✅ **Idea Validator** — Paste your idea → get PMF score + similar project analysis (powered by Gemini 2.0 Flash)
+- ✅ **Idea Validator** — Paste your idea → get PMF score + similar project analysis (powered by Grok `grok-4-1-fast-reasoning`)
 - 🐋 **Whale Conviction Signals** — Stealth accumulation, smart money exit detection
 - ⛓️ **Onchain Scoreboard** — Survival scores stored on BSC mainnet (composable, queryable)
+
+## Live Demo
+
+**🌐 [shiporskip.xyz](https://shiporskip.xyz)** — Try the Idea Validator, explore 200+ scored BNB projects, read post-mortems.
 
 ## Quick Start
 
@@ -35,9 +39,9 @@ npm install
 
 # Copy environment variables
 cp .env.example .env
-# Fill in: MORALIS_API_KEY, BSCSCAN_API_KEY, GEMINI_API_KEY
+# Recommended: XAI_API_KEY (AI verdict mode). Optional: MORALIS_API_KEY, BSCSCAN_API_KEY, etc. for pipeline refresh.
 
-# Run data pipeline (fetches and analyzes 30-50 BSC projects)
+# Run data pipeline (optional; regenerates snapshot dataset)
 npm run seed
 
 # Start development server
@@ -45,6 +49,19 @@ npm run dev
 ```
 
 > **No API keys?** Run `npm run dev` directly — the app ships with `data-example/` containing sample data for instant demo.
+
+## Data Validity & Provenance (for Judges)
+
+- Current hackathon build runs in **snapshot mode**: UI reads from `data/projects.json` to ensure stable and reproducible judging.
+- `data/projects.json` is a **temporary submission dataset**, not the final production ingestion architecture.
+- Discovery baseline for this snapshot is manually curated from **BNB Chain Dapp directory (DappBay)**, then normalized into our schema.
+- Validation and enrichment are layered from **NodeReal on-chain signals** and **X social signals** (plus supporting market/on-chain sources where available).
+- Every project record includes score factors and timestamps so outputs are auditable.
+- Production roadmap is **dynamic pipeline mode** (scheduled refresh + premium providers such as Moralis/RootData) without changing frontend contract.
+
+### Submission Disclosure (copy-ready)
+
+For this hackathon submission, ShipOrSkip uses a reproducible snapshot dataset (`data/projects.json`) so judges can run the product deterministically in local/dev environments. The current snapshot is bootstrapped from BNB ecosystem project listings and enriched with on-chain + social evidence (NodeReal and X as primary supporting layers). This is an MVP reliability choice for judging, while the architecture is designed to scale to automated premium ingestion (for example Moralis/RootData) in post-hackathon production.
 
 ## Documentation
 
@@ -65,11 +82,12 @@ See [`bsc.address`](bsc.address) for deployed contract addresses and explorer li
 | Layer | Technology |
 |-------|------------|
 | Frontend | Next.js 14, Tailwind CSS v4, TypeScript |
-| AI | Gemini 2.0 Flash (free tier) |
-| Data Pipeline | DeFiLlama, Moralis, BSCScan, GeckoTerminal, DexScreener, Twitter |
+| AI | Grok `grok-4-1-fast-reasoning` (primary verdict), Kimi K2.5 (Reddit intel), Grok `grok-4-1-fast-non-reasoning` (X/Twitter intel) |
+| Data Pipeline | Dapp discovery snapshot + NodeReal + X + BSCScan + CoinGecko + GeckoTerminal + DexScreener |
 | Charts | Recharts + TradingView Lightweight Charts |
 | Smart Contract | Solidity + Hardhat (BSC Mainnet) |
-| Deploy | Vercel |
+| Anti-spam | Cloudflare Turnstile CAPTCHA |
+| Deploy | VPS (Nginx + PM2) — supports 90s AI validation timeout |
 
 ## AI-Assisted Development
 
@@ -77,6 +95,7 @@ This project was built with significant AI assistance throughout the entire deve
 
 ## Hackathon
 
+- **Live:** [shiporskip.xyz](https://shiporskip.xyz)
 - **Event:** [Good Vibes Only: OpenClaw Edition](https://dorahacks.io/hackathon/goodvibes/detail) (BNB Chain)
 - **Track:** Builders' Tools
 - **Prize Pool:** $100K across 10 winners

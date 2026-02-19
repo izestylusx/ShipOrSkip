@@ -81,6 +81,75 @@ function slugify(name: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
+/**
+ * Extract a clean BSC address from DeFiLlama's address field.
+ * DeFiLlama returns addresses in various formats:
+ *   - "bsc:0x53e562..."  → "0x53e562..."
+ *   - "0x53e562..."     → "0x53e562..." (already clean)
+ *   - "arbitrum:0x..."   → null (not BSC)
+ *   - "multi:0x...,bsc:0x..." → extract BSC part
+ *   - null               → null
+ */
+function extractBscAddress(raw: string | null): string | null {
+  if (!raw) return null;
+
+  // If it's a plain 0x address (no chain prefix), assume it could be BSC
+  if (raw.startsWith("0x") && raw.length === 42) return raw;
+
+  // Check for "bsc:0x..." prefix
+  if (raw.toLowerCase().startsWith("bsc:")) {
+    return raw.slice(4); // strip "bsc:"
+  }
+
+  // Multi-address: maybe comma-separated or multi-chain
+  // Look for a BSC address in the string
+  const bscMatch = raw.match(/bsc:(0x[a-fA-F0-9]{40})/i);
+  if (bscMatch) return bscMatch[1];
+
+  // Other chain prefix (arbitrum:, ethereum:, etc.) → not BSC
+  if (raw.includes(":")) return null;
+
+  // Bare 0x address of correct length
+  if (raw.startsWith("0x")) return raw;
+
+  return null;
+}
+
+// ---------------------------------------------------------------------------
+// Exclusion list — CEXs, non-BNB-native protocols, junk entries
+// These get auto-discovered because they have BSC deployments in DeFiLlama
+// but they are NOT BNB ecosystem projects.
+// ---------------------------------------------------------------------------
+const EXCLUDED_SLUGS = new Set([
+  // CEXs — centralized exchanges, not BNB ecosystem projects
+  "binance-cex", "bybit", "bitget", "htx", "gate", "gate.io",
+  "mexc", "deribit", "kucoin", "crypto.com", "crypto-com",
+  "okx", "coinbase", "kraken", "huobi",
+  // Non-BNB-native protocols (just have BSC deployments)
+  "aave-v3", "aave", "aave-v2", "morpho", "morpho-blue", "morpho-v1",
+  "curve-dex", "curve", "curve-finance",
+  "uniswap", "uniswap-v3", "uniswap-v2",
+  "binance-staked-eth", "lido",
+  "blackrock-buidl", "compound", "compound-v3",
+  "makerdao", "spark",
+  // Junk / dead forks / non-projects
+  "bepswap", "allinx", "longdrink", "yogi-finance",
+]);
+
+// Also exclude by name patterns
+const EXCLUDED_NAME_PATTERNS = [
+  /^binance\b/i, /^bybit\b/i, /^bitget\b/i, /^htx\b/i,
+  /^gate\b/i, /^mexc\b/i, /^deribit\b/i, /^kucoin\b/i,
+  /^crypto\.?com\b/i, /^okx\b/i, /^coinbase\b/i, /^kraken\b/i,
+  /^huobi\b/i, /^blackrock\b/i,
+];
+
+function isExcluded(name: string, slug: string): boolean {
+  const id = slugify(name);
+  if (EXCLUDED_SLUGS.has(slug) || EXCLUDED_SLUGS.has(id)) return true;
+  return EXCLUDED_NAME_PATTERNS.some(pattern => pattern.test(name));
+}
+
 function mapDefiLlamaCategory(cat: string): Category {
   const map: Record<string, Category> = {
     Dexes: "DEX",
@@ -155,6 +224,7 @@ async function main(): Promise<void> {
       (p) => p.slug === c.slug || p.name.toLowerCase() === c.name.toLowerCase()
     );
 
+    const cleanAddr = extractBscAddress(liveData?.address ?? null);
     const seed: SeedProject = {
       id: slugify(c.name),
       slug: slugify(c.name),
@@ -162,8 +232,8 @@ async function main(): Promise<void> {
       category: c.category,
       defillamaSlug: c.slug,
       coingeckoId: liveData?.gecko_id ?? null,
-      tokenAddress: liveData?.address ?? null,
-      contractAddresses: liveData?.address ? [liveData.address] : [],
+      tokenAddress: cleanAddr,
+      contractAddresses: cleanAddr ? [cleanAddr] : [],
       twitterHandle: c.twitter ?? liveData?.twitter ?? null,
       website: liveData?.url ?? null,
       source: "curated",
@@ -171,11 +241,31 @@ async function main(): Promise<void> {
     seedMap.set(seed.id, seed);
   }
 
-  // 3b. Additional BSC protocols not in curated list (tvl > $100k)
-  for (const p of bscProtocols) {
+  // 3b. Auto-discover BSC protocols not in curated list
+  // Strategy: capture BOTH thriving + dead/zombie for the full picture
+  //   - "alive" = TVL >= $500K (top performers still running)
+  //   - "dead/zombie" = TVL < $10K but has a token address (was once real, now collapsed)
+  // This is core to ShipOrSkip's value: learning from dead projects.
+
+  const notCurated = bscProtocols.filter((p) => !seedMap.has(slugify(p.name)) && !isExcluded(p.name, p.slug));
+
+  // TOP ALIVE — sorted by TVL descending
+  const topAlive = notCurated
+    .filter((p) => (p.tvl ?? 0) >= 500_000)
+    .sort((a, b) => (b.tvl ?? 0) - (a.tvl ?? 0))
+    .slice(0, 15);
+
+  // DEAD/ZOMBIE — TVL near zero but has token address (proof it was once real)
+  const deadZombie = notCurated
+    .filter((p) => (p.tvl ?? 0) < 10_000 && p.address)
+    .sort((a, b) => (a.tvl ?? 0) - (b.tvl ?? 0)) // most dead first
+    .slice(0, 15);
+
+  const autoDiscovered = [...topAlive, ...deadZombie];
+
+  for (const p of autoDiscovered) {
     const id = slugify(p.name);
-    if (seedMap.has(id)) continue; // already curated
-    if ((p.tvl ?? 0) < 100_000) continue; // skip tiny
+    const cleanAddr = extractBscAddress(p.address);
 
     const seed: SeedProject = {
       id,
@@ -184,14 +274,17 @@ async function main(): Promise<void> {
       category: mapDefiLlamaCategory(p.category),
       defillamaSlug: p.slug,
       coingeckoId: p.gecko_id ?? null,
-      tokenAddress: p.address ?? null,
-      contractAddresses: p.address ? [p.address] : [],
+      tokenAddress: cleanAddr,
+      contractAddresses: cleanAddr ? [cleanAddr] : [],
       twitterHandle: p.twitter ?? null,
       website: p.url ?? null,
       source: "defillama",
     };
     seedMap.set(seed.id, seed);
   }
+  console.log(`  ↳ auto-discovered alive (TVL≥$500K): ${topAlive.length}`);
+  console.log(`  ↳ auto-discovered dead/zombie (TVL<$10K): ${deadZombie.length}`);
+  console.log(`  ↳ total auto-discovered: ${autoDiscovered.length}`);
 
   // 3c. Manual (non-DeFiLlama) projects
   for (const m of MANUAL_PROJECTS) {

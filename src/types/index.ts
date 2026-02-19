@@ -12,9 +12,17 @@ export type Category =
   | "NFT"
   | "Meme"
   | "Stablecoin"
-  | "Infrastructure";
+  | "Infrastructure"
+  | "AI";
 
-export type ScoringCategory = "defi" | "gaming" | "meme" | "infrastructure";
+export type ScoringCategory =
+  | "defi_token"
+  | "defi_notoken"
+  | "gaming_token"
+  | "gaming_notoken"
+  | "meme"
+  | "infra_token"
+  | "infra_notoken";
 
 export type ProjectStatus = "alive" | "zombie" | "dead" | "pivoted";
 
@@ -53,6 +61,7 @@ export interface ProjectData {
   slug: string;
   name: string;
   category: Category;
+  categories: Category[];
   categoryType: ScoringCategory;
 
   // Identifiers
@@ -70,13 +79,14 @@ export interface ProjectData {
 
   // Factor scores (each 0-100)
   factors: {
+    // Legacy factors
     tvlRetention?: number;
     txTrend?: number;
     priceTrend?: number;
     tokenQuality?: number;
     whaleConviction?: number;
-    twitterActivity?: number;
-    mentionVolume?: number;
+    communityEngagement?: number;
+    marketRelevance?: number;
     categoryHealth?: number;
     ecosystemIntegration?: number;
     holderTrend?: number;
@@ -86,6 +96,19 @@ export interface ProjectData {
     contractFlags?: number;
     contractActivity?: number;
     githubActivity?: number;
+    // Pipeline v2 factors
+    userActivity?: number;
+    userGrowth?: number;
+    txActivity?: number;
+    dappBayRank?: number;
+    tvlHealth?: number;
+    tradingHealth?: number;
+    contractTrust?: number;
+    holderStrength?: number;
+    marketSentiment?: number;
+    marketCap?: number;
+    priceMomentum?: number;
+    twitterActivity?: number;
   };
 
   // Raw data
@@ -107,6 +130,9 @@ export interface ProjectData {
     holderChange30d: number;
     top10HolderPct: number;
     moralisScore: number | null;
+    marketCap: number | null;
+    athChangePercent: number | null;
+    priceChange30d: number | null;
   } | null;
 
   twitter: {
@@ -119,11 +145,12 @@ export interface ProjectData {
   } | null;
 
   contract: {
-    firstTxDate: string;
+    firstTxDate: string | null;
     monthlyTx: number[];
-    verified: boolean;
-    ownershipRenounced: boolean;
+    verified: boolean | null;
+    ownershipRenounced: boolean | null;
     uniqueWallets30d: number;
+    transfers24h: number | null;
   };
 
   // AI-generated
@@ -201,8 +228,9 @@ export interface NarrativeData {
 // Idea validation
 export interface IdeaValidationInput {
   description: string;
-  category: string;
-  targetUsers: string;
+  category?: string;
+  categories?: Category[];
+  targetUsers?: string;
 }
 
 export type ValidationSignal = "SHIP" | "HIGH_RISK" | "SHIP_WITH_CAUTION";

@@ -28,8 +28,8 @@ All design decisions flow through three layers:
 
 | Layer | Purpose | Example | When to Change |
 |-------|---------|---------|----------------|
-| **Primitive** | Raw values | `--color-green-500: #00D26A` | Rarely (brand change) |
-| **Semantic** | Contextual meaning | `--verdict-ship: var(--color-green-500)` | Theme/mode changes |
+| **Primitive** | Raw values | `--color-ship-600: #0D9669` | Rarely (brand change) |
+| **Semantic** | Contextual meaning | `--verdict-ship: var(--color-ship-600)` | Theme/mode changes |
 | **Component** | Specific element | `--badge-ship-bg: var(--verdict-ship)` | Component redesign |
 
 **Rule:** Never use primitives directly in components. Always go through semantic → component tokens.
@@ -75,11 +75,11 @@ All design decisions flow through three layers:
 
 ```html
 <!-- Then in your components -->
-<div class="bg-navy-900 text-white rounded-xl p-5 border border-navy-700">
-  <span class="bg-ship-700 text-white rounded-full px-2.5 py-1 text-xs font-medium tracking-wider uppercase">
-    SHIP
+<div class="bg-white text-warm-900 rounded-xl p-5 border border-warm-300 shadow-sm">
+  <span class="bg-ship-100 text-ship-800 rounded-full px-2.5 py-1 text-xs font-medium tracking-wider uppercase">
+    ✓ SHIP
   </span>
-  <p class="font-mono text-5xl font-bold text-white">87</p>
+  <p class="font-mono text-5xl font-bold text-warm-900">87</p>
 </div>
 ```
 
@@ -91,21 +91,27 @@ All design decisions flow through three layers:
 
 | Name | Role | Anchor | Scale |
 |------|------|--------|-------|
-| **Navy** | Foundation/background | `#0A1628` (900) | 50–950 |
-| **Green (Ship)** | Positive verdicts | `#00D26A` (500) | 50–950 |
-| **Red (Skip)** | Negative verdicts | `#FF3B5C` (400) | 50–950 |
-| **Amber (Wait)** | Caution/zombie | `#FFB800` (500) | 50–950 |
-| **Blue (Data)** | Information/links | `#3B82F6` (500) | 50–950 |
+| **Warm Neutrals** | Foundation/page surface | `#FAF9F6` (100) | 50–950 |
+| **Ink** | Dark frame (nav/footer) | `#1A1A1A` (900) | 50–950 |
+| **Teal-Green (Ship)** | Positive verdicts | `#0D9669` (600) | 50–950 |
+| **Coral-Red (Skip)** | Negative verdicts | `#DC4A4A` (500) | 50–950 |
+| **Warm Amber (Wait)** | Caution/zombie | `#D97C0A` (600) | 50–950 |
+| **Blue (Data)** | Information/links | `#2563EB` (600) | 50–950 |
 | **Purple (Whale)** | Smart money/premium | `#8B5CF6` (500) | 50–950 |
-| **Slate** | Neutrals | Tailwind Slate | 50–950 |
+| **Stone** | Neutrals (warm undertone) | Tailwind Stone | 50–950 |
 
 ### Color Ratio
-- **60%** — Navy + Neutrals (surfaces, containers)
-- **30%** — Verdict colors (green/red/amber for decisions)
+- **60%** — Warm Neutrals + Stone (surfaces, containers, backgrounds)
+- **30%** — Verdict colors (teal-green/coral/amber for decisions)
 - **10%** — Blue + Purple (accents, special elements)
 
-### Theme Support
-Default is dark (navy-900 base). Light theme via `data-theme="light"` or `.theme-light`.
+### Theme Architecture
+Default is **warm editorial light** (`warm-100` base, white cards). 
+Dark frame via `data-theme="dark"` or `.theme-dark` — used for nav/footer only.
+
+Design rationale: ShipOrSkip targets founders & vibecoders (not heavy developers).
+Warm light activates "broad focus / divergent thinking" (Fredrickson 2004) optimal
+for strategic ideation. Dark ink-900 creates an "authority frame" for nav/footer.
 
 ---
 
@@ -161,18 +167,18 @@ Max reading width: **65ch** (`--measure-base`)
 ```
     ╭──────╮
    │  87   │    Monospace, bold, centered in circular progress ring
-    ╰──────╯    Track: navy-700, Fill: green-500 (70-100), amber-500 (40-69), red-400 (0-39)
+    ╰──────╯    Track: warm-300, Fill: ship-600 (70-100), wait-500 (40-69), skip-500 (0-39)
 ```
 
 ### Project Card
 ```
 ┌─────────────────────────────────────────┐
-│  [Status dot + label]     [Verdict]     │    bg: navy-800
-│                                         │    border: navy-700
+│  [Status dot + label]     [Verdict]     │    bg: white
+│                                         │    border: warm-300
 │  Project Name                           │    border-radius: 12px
 │  Brief description text...              │    padding: 20px
-│                                         │    hover: border → slate-500
-│  TVL: $2.1M    Age: 4mo    Score: 72    │    shadow: glow-ship on ship
+│                                         │    hover: border → warm-500, shadow-md
+│  TVL: $2.1M    Age: 4mo    Score: 72    │    shadow: glow-ship on ship verdict
 └─────────────────────────────────────────┘
 ```
 
@@ -223,4 +229,4 @@ Before any UI ships:
 
 ---
 
-*Last updated: February 14, 2026 — Brand Foundation v1.0*
+*Last updated: February 15, 2026 — Warm Editorial Light v2.0*

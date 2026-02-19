@@ -4,12 +4,17 @@
   "contracts": [
     {
       "name": "ShipOrSkipScoreboard",
-      "address": "0x___DEPLOY_PENDING___",
-      "explorerLink": "https://bscscan.com/address/___DEPLOY_PENDING___",
-      "description": "Public scoreboard storing survival scores (0-100) for 30-50 BSC projects + idea attestation hashes. Composable — any dApp can query project scores onchain."
+      "address": "0xd6a229D8cFbde4be596dd9Cd53d1b3E8bD272432",
+      "explorerLink": "https://bscscan.com/address/0xd6a229D8cFbde4be596dd9Cd53d1b3E8bD272432",
+      "verifiedCode": "https://bscscan.com/address/0xd6a229D8cFbde4be596dd9Cd53d1b3E8bD272432#code",
+      "proofTxHash": "0x4afe87ab4df35e14ca0f91adaac35061b31d8da438dd9b66c8468a1f18deef58",
+      "proofTxLink": "https://bscscan.com/tx/0x4afe87ab4df35e14ca0f91adaac35061b31d8da438dd9b66c8468a1f18deef58",
+      "submitIdeaTxHash": "",
+      "submitIdeaTxLink": "",
+      "description": "Public scoreboard v2 — security-hardened. Stores survival scores (0-100) for 221 BSC projects + idea attestation hashes. submitIdea uses on-chain nonce to prevent front-running. Composable."
     }
   ],
-  "frontendUrl": "https://___DEPLOY_PENDING___.vercel.app",
-  "backendApi": "https://___DEPLOY_PENDING___.vercel.app/api",
-  "notes": "Contract deployed on Day 4. Testnet deployment available earlier on BSC Testnet (chainId 97). Survival scores are batch-registered after data pipeline completes. Idea validation attestation hashes are stored when users validate ideas through the platform."
+  "frontendUrl": "https://shiporskip.xyz",
+  "backendApi": "http://207.148.9.29:4000",
+  "notes": "Contract deployed on Day 4 to BSC Testnet and BSC Mainnet (same deployer, same nonce, same bytecode). Initial ecosystem snapshot was written on-chain right after deploy. Batch register milestone achieved with 40 projects on BSC mainnet (plus earlier 5-project tx). submitIdea flow now has a real mainnet transaction proof captured from validator workflow."
 }
