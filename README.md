@@ -264,7 +264,6 @@ For this hackathon submission, ShipOrSkip uses a reproducible snapshot dataset (
 |----------|-------------|
 | [📋 PROJECT.md](docs/PROJECT.md) | Problem, solution, impact, roadmap |
 | [🔧 TECHNICAL.md](docs/TECHNICAL.md) | Architecture, setup guide, demo walkthrough |
-| [📎 EXTRAS.md](docs/EXTRAS.md) | Demo video & presentation links |
 | [🤖 AI_BUILD_LOG.md](docs/AI_BUILD_LOG.md) | AI-assisted development process log |
 | [⛓️ bsc.address](bsc.address) | Smart contract deployments |
 
