@@ -69,7 +69,7 @@ ShipOrSkip runs as a **two-server system** with a shared Supabase PostgreSQL dat
 ┌───────────▼──────────────────────────────────────┐
 │  BSC Mainnet                                      │
 │  ShipOrSkipScoreboard.sol                        │
-│  — 111 project survival scores on-chain          │
+│  — 220 project survival scores on-chain          │
 └──────────────────────────────────────────────────┘
 ```
 
